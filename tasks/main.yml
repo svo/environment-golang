@@ -3,6 +3,32 @@
       apt: pkg=git
       sudo: yes
 
+    - name: Install bison
+      apt: pkg=bison
+      sudo: yes
+
+    - name: Create go working directory
+      file: path=~/go state=directory
+
+    - name: Setting up bash profile
+      lineinfile: dest=~/.bash_profile line="{{ item }}" create=yes
+      with_items:
+      - source "~/.gvm/scripts/gvm"
+      - export GOPATH=~/go
+      - export PATH="$PATH:$GOPATH/bin"
+
+    - name: Install pathogen
+      get_url: url=https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer dest=~/gvm-installer
+
+    - name: Install gvm
+      shell: /bin/bash ~/gvm-installer
+
+    - name: Install go
+      shell: bash -l -c "{{ item }}"
+      with_items:
+      - gvm install go1.4
+      - gvm use go1.4 --default
+
     - name: Install vim
       apt: pkg=vim
       sudo: yes
@@ -26,15 +52,5 @@
       - syntax on
       - filetype plugin indent on
 
-    - name: Create go working directory
-      file: path=~/go state=directory
-
-    - name: Setting GOTPATH
-      lineinfile: dest=~/.bash_profile line="export GOPATH=~/go" create=yes
-
-    - name: Setting bin
-      lineinfile: dest=~/.bash_profile line='export PATH="$PATH:$GOPATH/bin"' create=yes
-
-    - name: install golang
-      apt: name=golang state=latest
-      sudo: yes
+    - name: Setup vim
+      command: vim +GoInstallBinaries +qall
