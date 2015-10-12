@@ -1,2 +1,2 @@
-go_version: go1.4.3
+go_version: go1.5.1
 pkgset: project

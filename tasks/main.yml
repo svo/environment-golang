@@ -29,6 +29,8 @@
     - name: Install go
       shell: bash -l -c "{{ item }}"
       with_items:
+      - gvm install go1.4
+      - gvm use go1.4 --default
       - gvm install {{ go_version }}
       - gvm use {{ go_version }} --default
 
