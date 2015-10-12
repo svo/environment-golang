@@ -14,8 +14,6 @@
       lineinfile: dest=~/.bash_profile line="{{ item }}" create=yes
       with_items:
       - source "~/.gvm/scripts/gvm"
-      - export GOPATH=~/go
-      - export PATH="$PATH:$GOPATH/bin"
 
     - name: Install pathogen
       get_url: url=https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer dest=~/gvm-installer
@@ -28,6 +26,13 @@
       with_items:
       - gvm install go1.4
       - gvm use go1.4 --default
+
+    - name: Create project pkgset
+      shell: bash -l -c "gvm pkgset create {{ pkgset }}"
+      notify:
+      - Backup existing pkgset
+      - Setup project pkgset
+      - Set project pkgset as default
 
     - name: Install vim
       apt: pkg=vim
@@ -53,4 +58,4 @@
       - filetype plugin indent on
 
     - name: Setup vim
-      command: vim +GoInstallBinaries +qall
+      shell: bash -l -c "vim +GoInstallBinaries +qall"

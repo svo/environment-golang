@@ -1,0 +1,12 @@
+
+    - name: Backup existing pkgset
+      shell: cp ~/.gvm/environments/go1.4@{{ pkgset }} ~/.gvm/environments/go1.4@{{ pkgset }}.$(date +%F)
+
+    - name: Setup project pkgset
+      shell: sed -i '{{ item }}' ~/.gvm/environments/go1.4@{{ pkgset }}
+      with_items:
+      - s/\$GOPATH/\$HOME\/go\:\$GOPATH/g
+      - s/\${GVM_OVERLAY_PREFIX}\/bin\:\${PATH}/\${GVM_OVERLAY_PREFIX}\/bin\:\$HOME\/go\/bin\:\${PATH}/g
+
+    - name: Set project pkgset as default
+      shell: bash -l -c "gvm pkgset use {{ pkgset }} --default"
