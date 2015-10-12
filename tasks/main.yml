@@ -1,0 +1,40 @@
+
+    - name: Install git
+      apt: pkg=git
+      sudo: yes
+
+    - name: Install vim
+      apt: pkg=vim
+      sudo: yes
+
+    - name: Setup paths for vim
+      file: path={{ item }} state=directory
+      with_items:
+      - ~/.vim/autoload
+      - ~/.vim/bundle
+
+    - name: Install pathogen
+      get_url: url=https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim dest=~/.vim/autoload/pathogen.vim
+
+    - name: Install vim-go
+      git: repo=https://github.com/fatih/vim-go.git dest=~/.vim/bundle/vim-go
+
+    - name: Update .vimrc
+      lineinfile: dest=~/.vimrc line="{{ item }}" create=yes
+      with_items:
+      - execute pathogen#infect()
+      - syntax on
+      - filetype plugin indent on
+
+    - name: Create go working directory
+      file: path=~/go state=directory
+
+    - name: Setting GOTPATH
+      lineinfile: dest=~/.bash_profile line="export GOPATH=~/go" create=yes
+
+    - name: Setting bin
+      lineinfile: dest=~/.bash_profile line='export PATH="$PATH:$GOPATH/bin"' create=yes
+
+    - name: install golang
+      apt: name=golang state=latest
+      sudo: yes

@@ -1,0 +1,13 @@
+- hosts: all
+
+  pre_tasks:
+    - name: Update apt-get cache
+      apt: update_cache=yes
+      sudo: yes
+
+    - name: Install avahi
+      apt: pkg=avahi-daemon
+      sudo: yes
+
+  roles:
+    - role: .
