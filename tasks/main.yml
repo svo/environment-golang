@@ -1,10 +1,15 @@
 
-    - name: Install git
-      apt: pkg=git
-      sudo: yes
-
-    - name: Install bison
-      apt: pkg=bison
+    - name: Install prerequisite
+      apt: pkg={{ item }}
+      with_items:
+      - curl
+      - git
+      - mercurial
+      - make
+      - binutils
+      - bison
+      - gcc
+      - build-essential
       sudo: yes
 
     - name: Create go working directory
@@ -15,7 +20,7 @@
       with_items:
       - source "~/.gvm/scripts/gvm"
 
-    - name: Install pathogen
+    - name: Get gvm installer
       get_url: url=https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer dest=~/gvm-installer
 
     - name: Install gvm
@@ -24,8 +29,8 @@
     - name: Install go
       shell: bash -l -c "{{ item }}"
       with_items:
-      - gvm install go1.4
-      - gvm use go1.4 --default
+      - gvm install {{ go_version }}
+      - gvm use {{ go_version }} --default
 
     - name: Create project pkgset
       shell: bash -l -c "gvm pkgset create {{ pkgset }}"
