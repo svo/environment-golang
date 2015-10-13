@@ -10,8 +10,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = "vagrant-go"
   config.vm.network :private_network, type: "dhcp"
 
-  config.vm.synced_folder "~/projects/go", "/home/vagrant/go"
-
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbook.yml"
   end
