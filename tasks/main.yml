@@ -37,7 +37,6 @@
     - name: Create project pkgset
       shell: bash -l -c "gvm pkgset create {{ pkgset }}"
       notify:
-      - Backup existing pkgset
       - Setup project pkgset
       - Set project pkgset as default
 
