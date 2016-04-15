@@ -18,7 +18,7 @@
     - name: Setting up bash profile
       lineinfile: dest=~/.bash_profile line="{{ item }}" create=yes
       with_items:
-      - source "~/.gvm/scripts/gvm"
+      - source ~/.gvm/scripts/gvm
 
     - name: Get gvm installer
       get_url: url=https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer dest=~/gvm-installer
