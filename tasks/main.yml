@@ -10,21 +10,31 @@
       - bison
       - gcc
       - build-essential
+      tags:
+      - golang
       sudo: yes
 
     - name: Create go working directory
       file: path=~/go state=directory
+      tags:
+      - golang
 
     - name: Setting up bash profile
       lineinfile: dest=~/.bash_profile line="{{ item }}" create=yes
       with_items:
       - source ~/.gvm/scripts/gvm
+      tags:
+      - golang
 
     - name: Get gvm installer
       get_url: url=https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer dest=~/gvm-installer
+      tags:
+      - golang
 
     - name: Install gvm
       shell: /bin/bash ~/gvm-installer
+      tags:
+      - golang
 
     - name: Install go
       shell: bash -l -c "{{ item }}"
@@ -33,28 +43,45 @@
       - gvm use go1.4 --default
       - gvm install {{ go_version }}
       - gvm use {{ go_version }} --default
+      tags:
+      - golang
 
     - name: Create project pkgset
       shell: bash -l -c "gvm pkgset create {{ pkgset }}"
       notify:
       - Setup project pkgset
       - Set project pkgset as default
+      tags:
+      - golang
+      - development
 
     - name: Install vim
       apt: pkg=vim
       sudo: yes
+      tags:
+      - golang
+      - development
 
     - name: Setup paths for vim
       file: path={{ item }} state=directory
       with_items:
       - ~/.vim/autoload
       - ~/.vim/bundle
+      tags:
+      - golang
+      - development
 
     - name: Install pathogen
       get_url: url=https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim dest=~/.vim/autoload/pathogen.vim
+      tags:
+      - golang
+      - development
 
     - name: Install vim-go
       git: repo=https://github.com/fatih/vim-go.git dest=~/.vim/bundle/vim-go
+      tags:
+      - golang
+      - development
 
     - name: Update .vimrc
       lineinfile: dest=~/.vimrc line="{{ item }}" create=yes
@@ -62,6 +89,12 @@
       - execute pathogen#infect()
       - syntax on
       - filetype plugin indent on
+      tags:
+      - golang
+      - development
 
     - name: Setup vim
       shell: bash -l -c "vim +GoInstallBinaries +qall"
+      tags:
+      - golang
+      - development
